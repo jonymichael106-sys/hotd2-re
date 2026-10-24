@@ -1,0 +1,26 @@
+{
+  "version": 4,
+  "name": "hotd2.zip",
+  "items": [
+    "HOTD2.sh",
+    "hotd2"
+  ],
+  "items_opt": [],
+  "attr": {
+    "title": "The House of the Dead 2 (HOTD2RE)",
+    "porter": "unofficial",
+    "desc": "Native rebuild of The House of the Dead 2 (GitFist/hotd2-re), run through its OpenGL ES renderer. Needs the game data of the Windows release.",
+    "inst": "Copy the game folder of the HOTD2RE Windows release into hotd2/game. See README.md.",
+    "genres": [
+      "shooter"
+    ],
+    "image": {},
+    "rtr": false,
+    "exp": false,
+    "arch": [
+      "aarch64"
+    ],
+    "runtime": null,
+    "reqs": []
+  }
+}

@@ -1,150 +1,55 @@
-![HOTD2RE main menu](docs/images/hotd2re-header.png)
+# HOTD2RE en PortMaster (R36Max con ArkOS4Clones)
 
-# HOTD2RE
+Port no oficial de [GitFist/hotd2-re](https://github.com/GitFist/hotd2-re) (reconstrucción nativa de The House of the Dead 2)
+para consolas aarch64 con PortMaster. Usa el renderer OpenGL ES 3.0 (`--renderer gles`), pensado para Mali (libmali).
 
-A native C++20 rebuild of **The House of the Dead 2** for Windows, featuring online co-op, additional game modes, and modern controls and display options.
+**Estado: sin probar en una consola real.** Se verificó el backend GLES en Mesa llvmpipe y el empaquetado en un PC; el
+cross-compile a aarch64, el arranque en ArkOS4Clones, el audio y los controles están por probar. Ver "Qué probar primero".
 
-**[Download the game](https://github.com/GitFist/hotd2-re/releases/latest)** · **[Optional 2× graphics pack](https://github.com/GitFist/hotd2-re/releases/download/v2026.10.16-r/hotd2re-graphics-2x.zip)**
+## Cómo se construye
 
-## Features
+Hace falta una máquina con red libre (el entorno donde se escribió esto no podía bajar un compilador cruzado).
 
-- **Game modes:** Arcade, Original, Training, Boss, Scene Select, and Horde.
-- **Randomizer:** randomized enemies, enemy counts, weapons, items, voice lines, and character appearances.
-- **Online co-op:** two-player rooms, public lobbies, private room codes, and reconnect support.
-- **Flexible controls:** mouse, touchpad, touch, in-game light-gun setup for two players, and native Wii Remote setup with calibration and button mapping. Menus support clicking and shooting.
-- **Night Shift menus:** the full original attract cycle plays behind the menus, including the title flythrough, how-to-play demonstration, gameplay demos and story scenes. Includes Home lobby preview, Play/Practice pages, leaderboards, graphics options, pause and device setup. Classic menus remain selectable.
-- **Extras audio library:** all 38 music tracks with descriptive names and Standard/Alternate version labels on the left, effects and dialogue on the right. Browse independently while recordings play once, with Play, Pause and Reset controls for each song.
-- **Extras model viewer:** browse game models and animations, rotate and zoom the view, and preview available character sound variations.
-- **Graphics options:** fullscreen/windowed display, AA and texture filtering, render scaling, optional lighting effects, CRT, red/green blood and separate optional 2× textures. Supported x64 hardware can use vendor upscaling/frame generation and experimental ray shadows.
-- Graphics reset, menu opacity, Hide UI for live inspection, and saved gameplay crosshair visibility. The system mouse cursor hides during play; manual pause remains available while switching windows keeps the game and sound running.
-- Chapter results and an experimental Prototype chapter, available with **F8**.
-- Background update notifications with **Update and restart**, preserving saves, settings and installed packs, with recovery if installation is interrupted.
+**Opción A, GitHub Actions (sin instalar nada):** sube estos archivos a tu fork, abre la pestaña *Actions*, elige
+*PortMaster aarch64 package* y pulsa *Run workflow*. Al terminar, descarga el artefacto `hotd2-portmaster`.
 
-## Getting started
+**Opción B, en un Linux x86_64 (también WSL o un contenedor):**
 
-**Requirements:** Windows 10 or 11 (64-bit) and a Direct3D 11-compatible graphics device for the main download. Optional Direct3D 12/vendor features require compatible hardware; the separate x86 build has fewer advanced graphics features.
-
-1. Download **hotd2re-complete.zip** from the [latest release](https://github.com/GitFist/hotd2-re/releases/latest).
-2. Extract the ZIP to a writable folder.
-3. Open the `hotd2re` folder and run **hotd2.exe**.
-
-The download includes the required game data. Keep the `game` and `scenes` folders beside `hotd2.exe`. GitHub's **Source code** archives are for building the project.
-
-The October 23 update adds **Update and restart** and fixes Chapter 6 knife throwers running out of reach and pulling the camera away after one enemy is killed. The previous Night Shift audio, Extras, leaderboard and menu improvements remain included; see the [graphics fixes and validation](docs/GRAPHICS-FIXES.md).
-
-## Updates
-
-The game checks the official GitHub release page once in the background on normal launches. If a newer build is available, a prompt appears at the local title/main menu. **Update and restart** downloads and verifies the matching Windows client, closes the game, installs it, and restarts with your launch options. Saves, settings, controller calibration, original game data and installed packs are preserved. Failed installations restore the previous program files; interrupted installations recover on the next launch. Keep `.hotd2-update` if recovery needs another attempt. Automatic installation requires a writable local folder and Windows PowerShell.
-
-**Later** keeps you playing, and **Open download page** remains available for manual installation. Failed checks stay silent. Launch with `--no-update-check` to disable the check. Versions before October 23 need one manual update to gain the updater; follow the instructions below for that first update.
-
-For a manual update, close the game and extract the **entire new ZIP into a fresh writable folder**. Keep the new executable, accompanying DLLs, licenses and `scenes` together. Replacing only the executable can leave incompatible older runtimes installed.
-
-Before launching, copy your existing `hotd2re_settings.ini`, `hotd2re_save.bin`, and any `hotd2re_horde_records.txt`, `hotd2re_lightguns.ini` and `hotd2re_wii.ini` into the new `hotd2re` folder, replacing its supplied default settings. Copy installed visual-pack folders if your settings select them. Keep the old folder as a backup until you have checked the new version. Both online players should update together and create a new room.
-
-## Online play
-
-Both players need the same game version.
-
-1. Use **Host Online** on Home to host, or **Online** to open network choices. Classic menus use **Network**.
-2. Choose room rules to host, or **Browse Lobby** to join a room.
-3. For a private room, enter its code when prompted. **Peer to Peer** also supports joining an unlisted room by code.
-4. Once both players are connected, the host selects a mode and starts the game.
-
-Use **Pause → Return to Lobby** to choose another mode together. After a disconnect, select **Network → Rejoin Game** to return to an active match while the other player continues playing.
-
-Connections use a direct route when available, with an automatic server relay fallback.
-
-Home's **Leaderboard** page offers local Arcade, Original, Horde and individual Boss Mode records. After an eligible run's results and local initials screens finish, an online-name prompt appears automatically in both menu styles. Enter up to 12 characters using typing or the on-screen keyboard, then **Publish** or **Skip**. The prompt shows submission success or an error with a retry; opening it never uploads a score. Local initials remain three characters. Online names allow letters, numbers, spaces, periods, underscores and hyphens. Shared records are unverified and stored persistently; **Publish New Run** remains available as a manual fallback. Local records work offline.
-
-## Controls
-
-| Action | Default control |
-| --- | --- |
-| Aim | Mouse or light gun |
-| Fire / select | Left click or gun trigger |
-| Reload | Right click or gun reload button |
-| Confirm / start | Enter |
-| Skip ending credits | Left click, gun trigger, or Enter |
-| Pause / resume | Esc |
-| Navigate menus | Arrow keys, mouse, or gun aim |
-| Back | Esc or Backspace |
-| Quit | Main menu **Exit** or close the window |
-
-Open **Options > Game Options > Light Guns** or **Pause > Light Guns** to switch between mouse/touchpad input and light guns, assign Player 1 and Player 2, remap buttons, calibrate aim, and test both guns. Classic menus retain **Options > Light Guns**. See the [light-gun setup guide](docs/LIGHT-GUNS.md).
-
-Open **Extras** below **Online** on Home to preview the audio library (Classic also has an Extras entry). All **38 music tracks** retain their original preview numbers and have descriptive names. **Standard** and **Alternate** distinguish the two recordings of a theme; for example, 01 and 17 are the two Chapter 1 versions. Click or shoot a recording, or select it with the arrows and press Enter, to play it once. Wheel scrolling and the Prev/Next buttons browse each list without stopping playback. Each song has **Play** to start/resume, **Pause**, and **Reset** to rewind and stop; selecting its name restarts it. Left/right moves between music controls and the effects list. Effect names come from the game's audio files. Escape, reload or **Back** stops previews and returns to the main menu. Audio volumes remain in Game Options.
-
-**Master Volume** controls all game, menu, Extras and attraction audio. Its logarithmic scale starts at -45 dB for 1 and rises in even 5 dB steps to full volume at 10; 0 is an exact mute. **Attraction Volume** controls the Modern menu's background demo music, voices and effects independently of the gameplay category sliders. All five volume controls default to **5 / 10**. Existing saved choices are retained. Both controls are in **Game Options** and **Pause**, update immediately, and persist in the settings file. The attraction loop falls silent in Extras and when you start playing.
-
-**Extras > Model Viewer** contains Agents, Civilians, 35 enemy and creature appearances, and Bosses, including Goldman. Creatures include both Murrer appearances, the Kageo J half-body crawler, bats, owls, fish and the ambient moth. Drag the model list's scrollbar to browse; clicking the scrollbar track moves a page. Select a character to view it against black. Click the animation name to open a clip list with its own draggable scrollbar; the wheel scrolls that list while the current clip keeps playing. Left-drag rotates/tilts; middle-drag raises/lowers the camera. A/D or Left/Right rotate, W/S or Up/Down adjust height, and the wheel outside the clip list or Q/E zoom. R restores the camera. Page Up/Down selects an animation; Enter/Space toggles playback, with Play/Pause/Reset buttons also available. Animations loop with their authored motion sound cues. Escape, reload or Back closes the clip list, returns to the model list, then Extras.
-
-Every Model Viewer clip starts centered above the controls and remains centered as its pose changes. Selecting a clip or pressing Reset clears vertical panning while retaining your rotation and zoom. The **Mute / Unmute** button or **M** silences viewer sounds immediately without pausing animation or changing game volume settings; the choice stays active while browsing models. Native attack, reaction, civilian, weapon and boss cues use their original timing. Held one-frame poses play their cue once, and sustained effects stop on pause, mute, clip changes and exit.
-
-Zombie previews randomly select their original attack and impact variants for each occurrence, using the correct voice group. Choices are independent, as in gameplay, so an occasional repeat is possible. The approach groan is the original shared recording.
-
-Scrollable lists in Options, the audio previews, the model browser and the Original-mode inventory show a soft edge fade and arrow wherever more items remain. Each cue disappears at that end of the list; short lists show neither cue. Existing scroll buttons, wheel and keyboard navigation remain available.
-
-Choose **Blood Color: Green / Red** on the graphics menu's **Color** page. The change applies immediately and is saved locally; online players can choose independently.
-
-**Image > Gameplay Crosshairs > Off** hides both players' gameplay sights on this computer. Menu/shop/calibration pointers stay visible and aiming/shooting are unchanged. The system '+' pointer hides automatically during gameplay and returns for UI and desktop use.
-
-Switching to another window keeps the game and audio running. Use **Esc** to pause manually when needed; online manual pause stops the shared game. Background desktop input does not shoot or operate the game's menus.
-
-## Graphics and display
-
-Open a graphics shortcut under **Options**, or **Pause > Graphics Options**. Both menu themes provide the same nine categories: **Display, Image, Lighting, Performance, Packs, Color, Resolution, CRT and Advanced**. Availability depends on the active renderer, GPU and installed pack.
-
-**Display** contains windowed/borderless/exclusive fullscreen, aspect ratio, Fit/Stretch, monitor, menu style, opacity and **Reset All Graphics**. Reset asks for confirmation and preserves your pack, menu theme, game rules, audio and controls. Menu Style applies after restart. Menu Opacity controls Night Shift panels; Classic labels it “Night Shift only.”
-
-**Image** contains presets, MSAA/post AA/TAA, texture filtering, Sharp HUD, sharpening and crosshairs. Original/Clean/Enhanced presets change image choices and downsampling; they do not reset every graphics setting. **Resolution** contains internal render scale, output matching/SSAA, dynamic resolution, downsampling and FSR 1 spatial upscaling. **Color** provides color controls, blood color, HDR and black/white/gamma/geometry test patterns. **CRT** contains scanlines, phosphor masks, curvature and glow.
-
-**Lighting** adds optional pixel lighting, smoke blending, contact shading, raster/ray shadows, bloom, fog, reflections and cutscene blur. Direct3D 11 and SDL GPU provide the broad raster-effects paths. Native Direct3D 12 on Windows x64 supports compatible vendor reconstruction/frame generation and experimental directional DXR shadows; it does not support every D3D11/SDL effect. HDR requires Windows HDR and retains the original art's SDR range. Material detail and model smoothing under **Packs** need a compatible authored pack.
-
-**Performance** contains frame limits, VSync, supported tearing/latency controls and statistics. **Advanced** contains renderer, vendor upscaling, quality, frame generation and pose interpolation. Renderer/vendor choices require restart. Pose interpolation above 60 FPS adds up to one tick of visual delay; game logic stays at 60 Hz. Advanced effects, HDR, ray shadows and frame generation are optional and Off by default.
-
-While changing graphics during a paused game, **Hide UI / H** reveals the actual scene without resuming. H, Show UI, Back/Reload, Enter or Start restores the menu.
-
-## Wii Remotes
-
-Open **Options > Game Options > Wii Remotes** or **Pause > Wii Remotes** to connect and configure up to two remotes. Classic menus retain **Options > Wii Remotes**. Use a powered sensor bar with a compatible Bluetooth adapter, or a DolphinBar in Mode 4. See the [setup and calibration guide](docs/WII-REMOTES.md). Native support has automated tests; physical Wii Remote pairing/aiming remains unverified.
-
-## Optional 2× graphics
-
-The [2× graphics pack](https://github.com/GitFist/hotd2-re/releases/download/v2026.10.16-r/hotd2re-graphics-2x.zip) upgrades textures and menu graphics. Install it after the base game.
-
-1. Close the game and extract **hotd2re-graphics-2x.zip**.
-2. Copy its contents into the `hotd2re` folder, alongside `hotd2.exe`.
-3. Run **Play with 2x Graphics.cmd**.
-
-```text
-hotd2re/
-  hotd2.exe
-  game/
-  scenes/
-  Play with 2x Graphics.cmd
-  remaster-2x/
-    tex/
-    bmp/
+```
+sudo apt-get install cmake ninja-build pkg-config curl xz-utils zip binutils \
+     libdrm-dev libgbm-dev libasound2-dev libudev-dev libegl-dev
+portmaster/build-aarch64.sh     # compila con zig, apuntando a glibc 2.30 (la de ArkOS); deja portmaster/out/play
+portmaster/package.sh           # arma portmaster/out/hotd2-portmaster.zip
 ```
 
-To use the pack when launching `hotd2.exe` directly, add `assets=remaster-2x` to `hotd2re_settings.ini`. Remove that setting to return to the default graphics.
+El script falla si el binario resulta no ser aarch64 o si pide una glibc más nueva que `GLIBC` (por defecto 2.30). Comprueba
+la de tu consola con `ldd --version` y, si es otra, ejecuta con `GLIBC=2.xx portmaster/build-aarch64.sh`.
 
-For sharper rendering, increase **Render Scale** under **Graphics Options → Resolution**. This draws more pixels at runtime and needs no pack or large download; the 2× texture pack replaces artwork separately. Each online player can choose their own graphics settings. Additional setup and removal instructions are included in **INSTALL-2X-GRAPHICS.txt**.
+## Instalación en la consola
 
-## Development
+1. Descomprime `hotd2-portmaster.zip` en la carpeta de ports de la tarjeta (en ArkOS: `/roms/ports/`), de modo que existan
+   `HOTD2.sh` y la carpeta `hotd2/`. También puede ir en `/roms/tools/PortMaster/autoinstall/`.
+2. Copia **tu** carpeta `game` (del zip *hotd2re-multiplayer-complete* de la release de Windows, no se distribuye aquí porque
+   son datos de Sega) dentro de `hotd2/game`, de modo que quede `hotd2/game/Hod2.exe`.
+3. Reinicia EmulationStation y lanza *HOTD2* desde Ports. Si algo falla, mira `hotd2/log.txt`.
 
-HOTD2RE uses C++20 and SDL3, with Direct3D 11, SDL GPU and optional native Direct3D 12 rendering. Windows x86 and x64 builds are supported; advanced vendor reconstruction/frame generation requires the x64 build and compatible hardware.
+## Controles (hotd2.gptk, vía gptokeyb)
 
-- [Build and test guide](docs/DEVELOPMENT.md)
-- [Lobby server setup](server/lobby/README.md)
-- [Report a bug](https://github.com/GitFist/hotd2-re/issues)
+El juego apunta al puntero del mouse; gptokeyb lo emula: stick derecho o izquierdo mueve la mira, R1/R2 dispara (clic
+izquierdo), L1/L2 recarga (clic derecho), Start o A confirman, B o Select vuelven (Esc), la cruceta navega los menús.
+Disparar fuera de la pantalla también recarga. Los nombres de teclas del `.gptk` son los de gptokeyb; si tu versión usa
+otros, ajusta el archivo.
 
-## License and credits
+## Qué probar primero
 
-HOTD2RE is an independent fan project. **The House of the Dead 2** and its original game assets belong to Sega.
+1. `hotd2/log.txt`: que diga `play: renderer gles (…)` y no un error de EGL o de contexto.
+2. Que se vea el menú (si la imagen sale negra o cortada, probar otra resolución con `--width` y `--height` en `HOTD2.sh`).
+3. Que la mira se mueva con el stick (si no, revisar `/dev/uinput` y la versión de gptokeyb).
+4. Que haya sonido, y los fps en un nivel con muchos enemigos (el renderer es el nativo, sin efectos).
+5. Si el juego va lento: bajar la resolución interna en las opciones de pantalla.
 
-Original project code is available under the [MIT license](LICENSE). Game assets and other third-party material retain their respective licenses and copyright notices.
+## Qué contiene
 
-Built with [SDL](https://github.com/libsdl-org/SDL) (zlib license). The comparison tools use [Microsoft Detours](https://github.com/microsoft/Detours) (MIT license).
-
+- `HOTD2.sh`: lanzador de PortMaster. `hotd2.gptk`: mapeo de controles. `port.json`: metadatos (formato sin verificar).
+- `play`: el ejecutable aarch64. `scenes/`: definiciones de escenas del repositorio.
+- `game/`: vacía, la completas tú.
